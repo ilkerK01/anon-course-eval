@@ -12,14 +12,14 @@ import {
   Transaction,
   type TransactionId,
 } from '@midnight-ntwrk/midnight-js-protocol/ledger';
-import type { UnboundTransaction } from '@midnight-ntwrk/midnight-js-types';
+import { createProofProvider, type ProofProvider, type UnboundTransaction } from '@midnight-ntwrk/midnight-js-types';
 import semver from 'semver';
 import type { CourseEvalCircuitKeys, CourseEvalProviders } from '../../api/src/index';
 import type { CourseEvalPrivateState } from '../../contract/src/index';
 import { inMemoryPrivateStateProvider } from './in-memory-private-state-provider';
 
 export const NETWORK_ID = (import.meta.env.VITE_NETWORK_ID ?? 'preprod') as NetworkId;
-const FALLBACK_PROOF_SERVER = import.meta.env.VITE_PROOF_SERVER_URL ?? 'http://localhost:6300';
+const PROOF_SERVER = import.meta.env.VITE_PROOF_SERVER_URL as string | undefined;
 
 export interface WalletSession {
   readonly api: ConnectedAPI;
@@ -42,6 +42,19 @@ const waitForWallet = async (): Promise<InitialAPI> => {
   throw new Error('Lace wallet not found. Install Lace and enable Midnight (Preprod).');
 };
 
+const buildProofProvider = async (
+  api: ConnectedAPI,
+  zkConfigProvider: FetchZkConfigProvider<CourseEvalCircuitKeys>,
+): Promise<ProofProvider> => {
+  if (PROOF_SERVER) return httpClientProofProvider(PROOF_SERVER, zkConfigProvider);
+  const proving = await api.getProvingProvider({
+    getZKIR: (location) => zkConfigProvider.getZKIR(location as CourseEvalCircuitKeys),
+    getProverKey: (location) => zkConfigProvider.getProverKey(location as CourseEvalCircuitKeys),
+    getVerifierKey: (location) => zkConfigProvider.getVerifierKey(location as CourseEvalCircuitKeys),
+  });
+  return createProofProvider(proving as any);
+};
+
 export const connectWallet = async (): Promise<WalletSession> => {
   setNetworkId(NETWORK_ID);
   const initial = await waitForWallet();
@@ -57,7 +70,7 @@ export const connectWallet = async (): Promise<WalletSession> => {
   const providers: CourseEvalProviders = {
     privateStateProvider: inMemoryPrivateStateProvider<string, CourseEvalPrivateState>() as any,
     zkConfigProvider,
-    proofProvider: httpClientProofProvider(config.proverServerUri ?? FALLBACK_PROOF_SERVER, zkConfigProvider),
+    proofProvider: await buildProofProvider(api, zkConfigProvider),
     publicDataProvider: indexerPublicDataProvider(config.indexerUri, config.indexerWsUri),
     walletProvider: {
       getCoinPublicKey: () => shielded.shieldedCoinPublicKey,
