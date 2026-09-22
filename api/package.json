@@ -1,0 +1,13 @@
+{
+  "name": "course-eval-api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "module": "./dist/index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  }
+}
