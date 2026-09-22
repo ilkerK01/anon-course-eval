@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.vite/
+*.log
+.env.local
+ui/public/keys/
+ui/public/zkir/
+coverage/
+reports/
