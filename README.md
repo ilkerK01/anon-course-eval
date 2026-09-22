@@ -86,6 +86,15 @@ An on-chain observer **can see** that a rating of, say, 4 was added to course `C
 
 An on-chain observer **cannot see** which of the 30 enrolled students submitted that rating. The instructor, who handed out the codes and knows which student owns which code, cannot tell either: the nullifier is a different hash of the student's secret, and the proof never reveals the Merkle leaf. The one thing a student can reveal is their own secret, which only they hold.
 
+### What an observer can still infer
+
+Zero-knowledge hides *who*, not *when* or *how many*. Someone watching the chain can still learn:
+
+- **Timing.** Each rating is its own transaction with a block time. If only one student was online at that moment, the timing leaks more than the proof does. Larger classes and a longer rating window shrink this.
+- **Turnout.** The number of ratings versus enrolled codes is public by design.
+- **Small classes.** With two enrolled students and one rating, the instructor knows the rating came from one of two people. Candor does not pretend otherwise; the UI shows turnout so instructors see when a class is too small for anonymity to mean much.
+- **Wallet, not identity.** The transaction is paid by a Lace wallet. The contract never sees the wallet's link to a student, but a student who uses a wallet tied to their name elsewhere weakens their own anonymity. A fresh Preprod wallet is enough for the demo.
+
 ### Trust assumptions and known limits
 
 - **Roster integrity depends on whoever holds the instructor key.** The contract proves that every rating comes from a code on the roster and that each code rates at most once. It cannot prove that a code belongs to a real student, so an instructor could enroll codes they generated themselves. Mitigations: the roster is public, so the enrolled count can be checked against the class list, every student can verify their own code is on it, and the duplicate-enrollment guard stops the count from being padded with repeats. A registrar-held key (see PROPOSAL.md) moves this trust away from the person being evaluated.
@@ -179,6 +188,15 @@ npm test
 ## Product Proposal
 
 See [PROPOSAL.md](PROPOSAL.md).
+
+## Roadmap
+
+1. **Hosted proving.** Wallet-side or hosted proof server so students need nothing but Lace.
+2. **Registrar role and bulk enrollment.** Many codes per transaction, roster owned by the department rather than the person being evaluated.
+3. **Multi-question forms and short comments.** Several rated dimensions per course.
+4. **Pilot with one department on Preprod**, then Mainnet with a small group of instructors.
+
+Deployment records live in [`deployments/`](deployments/preprod.json).
 
 ## Notes for reviewers
 

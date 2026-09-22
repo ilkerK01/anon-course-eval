@@ -27,6 +27,9 @@ jobs:
       - name: Compile contract
         run: npm run compile
 
+      - name: Committed circuits match the source
+        run: git diff --exit-code --stat -- contract/managed ':!*.map'
+
       - name: Install dependencies
         run: npm ci
 

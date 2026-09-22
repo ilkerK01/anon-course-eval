@@ -1,0 +1,17 @@
+{
+  "network": "preprod",
+  "contractAddress": "0d5f3114df021fc8a651d73f811e7ec0bceca69b6ea176c5345877ae5a7b09d8",
+  "courseCode": "CENG-301 Fall 2026",
+  "compactCompiler": "0.31.1",
+  "circuits": ["enroll", "openEvaluation", "closeEvaluation", "submitRating"],
+  "latestKnownCall": {
+    "txHash": "3350f472cfd7f656288c82c366989ecf440db98c4671effa9d7c9cc58d15bffe",
+    "block": 2663465
+  },
+  "previousBuild": {
+    "contractAddress": "a9d23256a40f890ba1879934e37ff4b92289579e5543025cac93542a1fdada2e",
+    "note": "same contract without the duplicate-enrollment guard"
+  },
+  "indexer": "https://indexer.preprod.midnight.network/api/v4/graphql",
+  "liveDemo": "https://candor-gules.vercel.app/?course=0d5f3114df021fc8a651d73f811e7ec0bceca69b6ea176c5345877ae5a7b09d8"
+}
