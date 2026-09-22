@@ -308,7 +308,7 @@ export default function App() {
             <div className="letter-body reveal">
               <p>End-of-term surveys ask for honesty, then ask students to log in with their student ID.</p>
               <p>So the most useful feedback never gets written. It gets softened, skipped, or saved for the hallway.</p>
-              <p>Give them a way to be counted without being named: on the roster, provably, exactly once.</p>
+              <p>Give them a way to be counted without being named. Provably enrolled, provably once.</p>
               <p>
                 <strong>Candor does the counting. Midnight does the forgetting.</strong>
               </p>
@@ -319,7 +319,7 @@ export default function App() {
 
         <section className="why" id="why">
           <div className="wrap center">
-            <span className="script reveal">Why anonymous?</span>
+            <span className="script reveal">Why it holds</span>
             <h2 className="reveal">Prove it, don't promise it</h2>
             <p className="lead reveal">Most surveys promise anonymity. Candor makes it a property of the math.</p>
             <div className="why-grid">
@@ -340,7 +340,7 @@ export default function App() {
               </article>
               <article className="why-card reveal">
                 <div className="ico" style={{ background: 'var(--mint)' }}><Ico id="i-shield" /></div>
-                <h3>Not even us</h3>
+                <h3>Not even Candor</h3>
                 <p>The secret stays in the student's browser. The proof shows that a rater is on the roster, never which one. There is no database to leak.</p>
               </article>
             </div>
