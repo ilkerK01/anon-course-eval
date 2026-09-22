@@ -61,7 +61,7 @@ An on-chain observer **cannot see** which of the 30 enrolled students submitted 
 - **Contract:** Compact (compiler 0.31.1, language 0.23), `HistoricMerkleTree<10, Bytes<32>>`, `Set<Bytes<32>>` for nullifiers, counters for the tally
 - **SDK:** Midnight.js 4.1.1, compact-js 2.5.1, compact-runtime 0.16.0, ledger v8
 - **Wallet:** Lace (Midnight Preprod) through the DApp Connector API 4.x
-- **Frontend:** React 19, Vite 7, TypeScript
+- **Frontend:** React 19, Vite 7, TypeScript. Typefaces: Aspekta, Geist and Fasthand, all under the SIL Open Font License, self-hosted in `ui/public/fonts`
 - **Proving:** local proof server `midnightntwrk/proof-server:8.1.0`
 - **Tests:** Vitest against the compiled contract
 - **CI:** GitHub Actions
