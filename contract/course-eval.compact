@@ -1,0 +1,98 @@
+pragma language_version >= 0.20;
+
+import CompactStandardLibrary;
+
+export enum Phase {
+  ENROLLMENT,
+  OPEN,
+  CLOSED
+}
+
+export ledger courseCode: Bytes<32>;
+export ledger instructor: Bytes<32>;
+export ledger phase: Phase;
+export ledger roster: HistoricMerkleTree<10, Bytes<32>>;
+export ledger enrolled: Counter;
+export ledger nullifiers: Set<Bytes<32>>;
+export ledger responses: Counter;
+export ledger ratingTotal: Counter;
+export ledger oneStar: Counter;
+export ledger twoStar: Counter;
+export ledger threeStar: Counter;
+export ledger fourStar: Counter;
+export ledger fiveStar: Counter;
+
+witness localSecretKey(): Bytes<32>;
+witness findRosterPath(leaf: Bytes<32>): MerkleTreePath<10, Bytes<32>>;
+
+constructor(code: Bytes<32>) {
+  courseCode = disclose(code);
+  instructor = disclose(instructorKey(localSecretKey()));
+  phase = Phase.ENROLLMENT;
+}
+
+export circuit instructorKey(sk: Bytes<32>): Bytes<32> {
+  return persistentHash<Vector<2, Bytes<32>>>([pad(32, "course-eval:instructor:"), sk]);
+}
+
+export circuit studentCommitment(sk: Bytes<32>): Bytes<32> {
+  return persistentHash<Vector<2, Bytes<32>>>([pad(32, "course-eval:student:"), sk]);
+}
+
+export circuit nullifierFor(sk: Bytes<32>, code: Bytes<32>): Bytes<32> {
+  return persistentHash<Vector<3, Bytes<32>>>([pad(32, "course-eval:nullifier:"), code, sk]);
+}
+
+circuit onlyInstructor(): [] {
+  assert(instructor == instructorKey(localSecretKey()), "only the instructor can do this");
+}
+
+export circuit enroll(commitment: Bytes<32>): [] {
+  onlyInstructor();
+  assert(phase == Phase.ENROLLMENT, "enrollment is closed");
+  roster.insert(disclose(commitment));
+  enrolled.increment(1);
+}
+
+export circuit openEvaluation(): [] {
+  onlyInstructor();
+  assert(phase == Phase.ENROLLMENT, "evaluation already started");
+  assert(enrolled > 0, "no students enrolled");
+  phase = Phase.OPEN;
+}
+
+export circuit closeEvaluation(): [] {
+  onlyInstructor();
+  assert(phase == Phase.OPEN, "evaluation is not open");
+  phase = Phase.CLOSED;
+}
+
+export circuit submitRating(rating: Uint<8>): [] {
+  assert(phase == Phase.OPEN, "evaluation is not open");
+  const r = disclose(rating);
+  assert(r >= 1 && r <= 5, "rating must be between 1 and 5");
+
+  const sk = localSecretKey();
+  const leaf = studentCommitment(sk);
+  const path = findRosterPath(leaf);
+  assert(path.leaf == leaf, "roster path does not match your commitment");
+  assert(roster.checkRoot(disclose(merkleTreePathRoot<10, Bytes<32>>(path))), "not on the course roster");
+
+  const nul = disclose(nullifierFor(sk, courseCode));
+  assert(!nullifiers.member(nul), "you have already evaluated this course");
+  nullifiers.insert(nul);
+
+  responses.increment(1);
+  ratingTotal.increment(r);
+  if (r == 1) {
+    oneStar.increment(1);
+  } else if (r == 2) {
+    twoStar.increment(1);
+  } else if (r == 3) {
+    threeStar.increment(1);
+  } else if (r == 4) {
+    fourStar.increment(1);
+  } else {
+    fiveStar.increment(1);
+  }
+}
