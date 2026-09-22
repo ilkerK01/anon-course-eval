@@ -225,8 +225,8 @@ export default function App() {
             <img src="/img/candor-mascot.webp" alt="" width="36" height="34" />
           </a>
           <div className="nav-right">
+            <a href="#why" className="link hide-sm">Why anonymous</a>
             <a href="#how" className="link hide-sm">How it works</a>
-            <a href="#privacy" className="link hide-sm">Privacy</a>
             {session ? (
               <div className="wallet-pill">
                 <span className="dot" />
@@ -247,7 +247,7 @@ export default function App() {
         <section className="hero">
           <div className="wrap hero-copy">
             <span className="script">Speak freely!</span>
-            <h1>Your students are talking. Are you listening?</h1>
+            <h1>Every student counted. No student named.</h1>
             <p className="lead">
               Candor collects course feedback that is provably anonymous. Every rating comes from an enrolled student, nobody
               rates twice, and nobody can tell who said what.
@@ -471,45 +471,6 @@ export default function App() {
           </div>
         </section>
 
-        <section className="pricing" id="privacy">
-          <div className="wrap center">
-            <span className="script reveal">Privacy model</span>
-            <h2 className="reveal">What the chain knows, and what it never will</h2>
-            <p className="lead reveal">Selective disclosure in two columns. Only the left one ever leaves a student's browser.</p>
-            <div className="plans">
-              <article className="plan reveal">
-                <div className="plan-in">
-                  <div className="plan-name">Public ledger</div>
-                  <div className="trial">Visible to everyone</div>
-                  <div className="price"><b>The tally</b><small>and nothing personal</small></div>
-                  <a className="btn btn-light" href={`${REPO_URL}#contract-address`} target="_blank" rel="noreferrer">Inspect the contract</a>
-                </div>
-                <ul className="perks">
-                  <li><Ico id="i-check" />Course code and phase</li>
-                  <li><Ico id="i-check" />Enrollment codes, as opaque hashes</li>
-                  <li><Ico id="i-check" />Spent nullifiers, one per rating</li>
-                  <li><Ico id="i-check" />Rating count, sum and star histogram</li>
-                  <li><Ico id="i-check" />Instructor key hash</li>
-                </ul>
-              </article>
-              <article className="plan accent reveal">
-                <div className="plan-in">
-                  <div className="plan-name">Private witness</div>
-                  <div className="trial">Never leaves the device</div>
-                  <div className="price"><b>Who you are</b><small>stays with you</small></div>
-                  <a className="btn btn-ghost" href={`${REPO_URL}#privacy-model`} target="_blank" rel="noreferrer">Read the privacy model</a>
-                </div>
-                <ul className="perks">
-                  <li><Ico id="i-lock" />Your secret key<em>Browser only</em></li>
-                  <li><Ico id="i-lock" />Which enrollment code is yours<em>Hidden in the proof</em></li>
-                  <li><Ico id="i-lock" />Your Merkle path on the roster<em>Witness</em></li>
-                  <li><Ico id="i-lock" />The link between your code and your rating<em>Never stored</em></li>
-                </ul>
-              </article>
-            </div>
-          </div>
-        </section>
-
         <OpenCourse
           onOpen={(address) => {
             if (openCourse(address)) goToApp('student');
@@ -538,7 +499,7 @@ export default function App() {
             <nav aria-label="Footer">
               <a href={REPO_URL} target="_blank" rel="noreferrer">GitHub</a>
               <a href="#how">How it works</a>
-              <a href="#privacy">Privacy model</a>
+              <a href={`${REPO_URL}#privacy-model`} target="_blank" rel="noreferrer">Privacy model</a>
               <a href="https://midnight.network" target="_blank" rel="noreferrer">Midnight</a>
             </nav>
           </div>
