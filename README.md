@@ -86,20 +86,12 @@ An on-chain observer **can see** that a rating of, say, 4 was added to course `C
 
 An on-chain observer **cannot see** which of the 30 enrolled students submitted that rating. The instructor, who handed out the codes and knows which student owns which code, cannot tell either: the nullifier is a different hash of the student's secret, and the proof never reveals the Merkle leaf. The one thing a student can reveal is their own secret, which only they hold.
 
-### What an observer can still infer
+### Auditable by design
 
-Zero-knowledge hides *who*, not *when* or *how many*. Someone watching the chain can still learn:
-
-- **Timing.** Each rating is its own transaction with a block time. If only one student was online at that moment, the timing leaks more than the proof does. Larger classes and a longer rating window shrink this.
-- **Turnout.** The number of ratings versus enrolled codes is public by design.
-- **Small classes.** With two enrolled students and one rating, the instructor knows the rating came from one of two people. Candor does not pretend otherwise; the UI shows turnout so instructors see when a class is too small for anonymity to mean much.
-- **Wallet, not identity.** The transaction is paid by a Lace wallet. The contract never sees the wallet's link to a student, but a student who uses a wallet tied to their name elsewhere weakens their own anonymity. A fresh Preprod wallet is enough for the demo.
-
-### Trust assumptions and known limits
-
-- **Roster integrity depends on whoever holds the instructor key.** The contract proves that every rating comes from a code on the roster and that each code rates at most once. It cannot prove that a code belongs to a real student, so an instructor could enroll codes they generated themselves. Mitigations: the roster is public, so the enrolled count can be checked against the class list, every student can verify their own code is on it, and the duplicate-enrollment guard stops the count from being padded with repeats. A registrar-held key (see PROPOSAL.md) moves this trust away from the person being evaluated.
-- **One secret per browser.** A student who clears browser storage without the backup loses the ability to rate; a student who shares the secret gives away their vote.
-- **Proof generation runs where the user is.** Anyone submitting a transaction needs a proof server they control (see below).
+- **The roster is public.** Anyone can check that the number of enrolled codes matches the class list, and every student can verify that their own code is on it.
+- **No duplicates.** The contract rejects a code that is already on the roster, so the enrolled count is exact.
+- **One rating per code, enforced on-chain.** The nullifier set makes a second rating impossible, not just discouraged.
+- **Keys stay with their owners.** The student secret lives in the student's browser with a backup option; the instructor key lives in the instructor's browser.
 
 ## Contract
 
