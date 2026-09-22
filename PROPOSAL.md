@@ -36,6 +36,8 @@ Midnight lets the contract check the two facts that matter, *this rater is enrol
 
 Realistic. The contract is small (5 circuits, the largest is `submitRating` with a depth-10 Merkle proof) and already runs end to end on Preprod. The fee model fits: each student pays one transaction's DUST, and instructors pay for roster updates.
 
+Known limit today: the roster is only as honest as the holder of the instructor key, since the contract cannot tell a real student's code from one the instructor generated. The roster being public keeps this auditable, and item 2 below removes the conflict of interest.
+
 Remaining work before Mainnet:
 
 1. **Hosted proving.** Replace the local proof server requirement with wallet-side proving or a hosted proof server, so students need nothing but Lace.
