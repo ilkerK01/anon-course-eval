@@ -28,11 +28,14 @@ export function useCourseState(address: string | null, refreshMs = 10_000) {
       return;
     }
     setLoading(true);
+    const abort = new AbortController();
+    const timer = setTimeout(() => abort.abort(), 15_000);
     try {
       const res = await fetch(INDEXER_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: QUERY, variables: { address } }),
+        signal: abort.signal,
       });
       const body = await res.json();
       if (body.errors) throw new Error(body.errors[0]?.message ?? 'Indexer query failed');
@@ -42,8 +45,10 @@ export function useCourseState(address: string | null, refreshMs = 10_000) {
       setState(deriveState(CourseEval.ledger(contractState.data)));
       setError(null);
     } catch (e) {
-      setError(e instanceof Error ? e.message : String(e));
+      const aborted = e instanceof DOMException && e.name === 'AbortError';
+      setError(aborted ? 'The Midnight indexer did not answer in time. Retrying shortly.' : e instanceof Error ? e.message : String(e));
     } finally {
+      clearTimeout(timer);
       setLoading(false);
     }
   }, [address]);

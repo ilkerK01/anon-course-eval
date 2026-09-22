@@ -6,7 +6,7 @@ import { isContractAddress, useCourseState } from './useCourseState';
 
 type Tab = 'student' | 'instructor' | 'results';
 
-const DEMO_COURSE = 'a9d23256a40f890ba1879934e37ff4b92289579e5543025cac93542a1fdada2e';
+const DEMO_COURSE = '0d5f3114df021fc8a651d73f811e7ec0bceca69b6ea176c5345877ae5a7b09d8';
 const REPO_URL = 'https://github.com/ilkerK01/anon-course-eval';
 
 const shorten = (value: string, head = 10, tail = 6) =>
@@ -711,7 +711,7 @@ function StudentPanel(props: {
             </p>
             <code className="code secret">{exportSecret(props.secret)}</code>
             <div className="row">
-              <input className="field" value={restore} onChange={(e) => setRestore(e.target.value)} placeholder="Paste a saved secret to restore" spellCheck={false} />
+              <input className="field" aria-label="Saved secret" value={restore} onChange={(e) => setRestore(e.target.value)} placeholder="Paste a saved secret to restore" spellCheck={false} />
               <button className="btn btn-ghost btn-sm" onClick={() => props.onImport(restore)} disabled={!restore}>Restore</button>
             </div>
           </div>
@@ -772,7 +772,7 @@ function InstructorPanel(props: {
         <h3>Create a course</h3>
         <p className="muted">Deploys a new evaluation contract. You become its instructor through a key stored in this browser.</p>
         <div className="row">
-          <input className="field" value={code} maxLength={32} onChange={(e) => setCode(e.target.value)} placeholder="Course code, e.g. CENG-301 Fall 2026" />
+          <input className="field" aria-label="Course code" value={code} maxLength={32} onChange={(e) => setCode(e.target.value)} placeholder="Course code, e.g. CENG-301 Fall 2026" />
           <button className="btn btn-light btn-sm" disabled={!props.walletReady || !code.trim() || props.busy} onClick={() => props.onCreate(code)}>
             Create
           </button>
