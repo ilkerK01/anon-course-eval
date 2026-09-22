@@ -8,8 +8,11 @@ Built for the Rise In × Midnight **New Moon to Full** program. Track: *Anonymou
 
 ## Live Demo
 
-Coming with the Vercel deployment. Until then, run it locally (see below) and open
-`http://localhost:3000/?course=a9d23256a40f890ba1879934e37ff4b92289579e5543025cac93542a1fdada2e`.
+**https://candor-gules.vercel.app**
+
+Demo course: https://candor-gules.vercel.app/?course=a9d23256a40f890ba1879934e37ff4b92289579e5543025cac93542a1fdada2e
+
+Reading results needs nothing. To create a course or rate, you need Lace on Midnight Preprod and a local proof server on port 6300 (one `docker run`, see below), because Midnight's hosted proof server does not accept browser requests.
 
 ## Contract Address
 
