@@ -1,10 +1,23 @@
-<p align="center"><img src="ui/public/img/candor-logo.svg" alt="Candor" width="300"></p>
+<p align="center">
+  <img src="ui/public/img/candor-icon-512.png" alt="Candor" width="120">
+</p>
 
-# Candor
+<h1 align="center">Candor</h1>
 
-[![CI](https://github.com/ilkerK01/anon-course-eval/actions/workflows/ci.yml/badge.svg)](https://github.com/ilkerK01/anon-course-eval/actions/workflows/ci.yml)
+<p align="center"><strong>Every student counted. No student named.</strong><br>
+Anonymous course evaluations, proven with zero-knowledge on Midnight.</p>
 
-> Anonymous course evaluations: students prove they are enrolled and rate once, without anyone learning who said what.
+<p align="center">
+  <a href="https://candor-gules.vercel.app"><img alt="Live demo" src="https://img.shields.io/badge/live%20demo-candor--gules.vercel.app-8b7cff?style=flat-square"></a>
+  <a href="https://github.com/ilkerK01/anon-course-eval/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/ilkerK01/anon-course-eval/actions/workflows/ci.yml/badge.svg"></a>
+  <img alt="Network" src="https://img.shields.io/badge/network-Midnight%20Preprod-0b0b10?style=flat-square">
+  <img alt="Tests" src="https://img.shields.io/badge/tests-14%20passing-5fe0a0?style=flat-square">
+  <img alt="License" src="https://img.shields.io/badge/license-MIT-a3a3b0?style=flat-square">
+</p>
+
+<p align="center"><img src="docs/screenshots/landing.png" alt="Candor landing page" width="860"></p>
+
+Students rarely write honest course feedback when they suspect the instructor can tell who wrote it. Candor fixes that with zero-knowledge proofs: a student proves "I am enrolled in this course and have not rated it yet" without revealing which student they are. The instructor, the university and the public see only the final tally.
 
 Built for the Rise In × Midnight **New Moon to Full** program. Track: *Anonymous Feedback / Survey* combined with *Private Allowlist Access*.
 
@@ -33,9 +46,17 @@ curl -s https://indexer.preprod.midnight.network/api/v4/graphql -H 'content-type
 
 An earlier build of the same contract (without the duplicate-enrollment guard) lives at `a9d23256a40f890ba1879934e37ff4b92289579e5543025cac93542a1fdada2e`.
 
-## What This Does
+## Screenshots
 
-Students rarely write honest course feedback when they suspect the instructor can tell who wrote it. Candor fixes that with zero-knowledge proofs.
+| Student view | Results, read from the indexer |
+| --- | --- |
+| ![Student view](docs/screenshots/app-student.png) | ![Results](docs/screenshots/results.png) |
+
+| Contract compiled to 4 circuits | 14 tests on the compiled circuits | Mobile |
+| --- | --- | --- |
+| ![Compile output](docs/screenshots/compile.png) | ![Test output](docs/screenshots/tests.png) | <img src="docs/screenshots/mobile.png" width="200" alt="Mobile layout"> |
+
+## What This Does
 
 1. **Enrollment.** Each student's browser generates a secret key that never leaves the device. The student sends the instructor an *enrollment code*, `hash("student", secret)`. The instructor adds the codes to the course contract, where they become leaves of a Merkle tree.
 2. **Rating.** When ratings open, the student submits a 1 to 5 rating. The circuit proves the student knows a secret whose code is a leaf of the roster tree, without revealing which leaf. It also publishes a *nullifier*, `hash("nullifier", courseCode, secret)`, so the same student cannot rate twice.
@@ -71,9 +92,23 @@ An on-chain observer **cannot see** which of the 30 enrolled students submitted 
 - **One secret per browser.** A student who clears browser storage without the backup loses the ability to rate; a student who shares the secret gives away their vote.
 - **Proof generation runs where the user is.** Anyone submitting a transaction needs a proof server they control (see below).
 
+## Contract
+
+`contract/course-eval.compact`
+
+| Circuit | Who | What it does |
+| --- | --- | --- |
+| `constructor(code)` | Instructor | Stores the course code and the instructor key |
+| `enroll(commitment)` | Instructor | Adds a student's enrollment code to the roster, rejects duplicates |
+| `openEvaluation()` | Instructor | Closes enrollment and opens ratings |
+| `closeEvaluation()` | Instructor | Stops accepting ratings, results become final |
+| `submitRating(rating)` | Enrolled student | Proves roster membership, spends a nullifier, updates the tally |
+
+Compiled output (circuits, prover and verifier keys, ZKIR, TypeScript bindings) is committed in `contract/managed/`.
+
 ## Tech Stack
 
-- **Contract:** Compact (compiler 0.31.1, language 0.23), `HistoricMerkleTree<10, Bytes<32>>`, `Set<Bytes<32>>` for nullifiers, counters for the tally
+- **Contract:** Compact (compiler 0.31.1, language 0.23), `HistoricMerkleTree<10, Bytes<32>>`, `Set<Bytes<32>>` for nullifiers and enrolled codes, counters for the tally
 - **SDK:** Midnight.js 4.1.1, compact-js 2.5.1, compact-runtime 0.16.0, ledger v8
 - **Wallet:** Lace (Midnight Preprod) through the DApp Connector API 4.x
 - **Frontend:** React 19, Vite 7, TypeScript. Typefaces: Aspekta, Geist and Fasthand, all under the SIL Open Font License, self-hosted in `ui/public/fonts`
@@ -152,10 +187,19 @@ See [PROPOSAL.md](PROPOSAL.md).
 - **Pinned dependency versions** in the root `package.json` `overrides` are deliberate. `@midnight-ntwrk/ledger-v8` and `@midnight-ntwrk/onchain-runtime-v3` must resolve to a single copy each, otherwise two WASM instances end up in the bundle and transactions fail with `expected instance of _LedgerParameters`. `@swc/core` is pinned because newer builds break `vite-plugin-top-level-await`.
 - **License:** MIT, see [LICENSE](LICENSE).
 
+## Brand
+
+| Mark | Wordmark | Icon |
+| --- | --- | --- |
+| <img src="ui/public/img/candor-mark.svg" width="64" alt="Candor mark"> | <img src="ui/public/img/candor-logo.svg" width="240" alt="Candor wordmark"> | <img src="ui/public/img/candor-icon-512.png" width="64" alt="Candor icon"> |
+
+A padlock whose body is a speech bubble, with a star inside: a rating given in confidence. Files live in `ui/public/img/`.
+
 ## Project Layout
 
 ```
 contract/   Compact contract, witnesses, compiled output (managed/), tests
 api/        Deploy / join / call helpers shared by the web app
 ui/         React + Vite web app with Lace wallet integration
+docs/       Screenshots used in this README
 ```

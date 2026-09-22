@@ -74,7 +74,7 @@ function Sprite() {
       <symbol id="i-copy" viewBox="0 0 24 24" {...s}><rect x="8" y="8" width="12" height="12" rx="3" /><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" /></symbol>
       <symbol id="i-user" viewBox="0 0 24 24" {...s}><circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0 1 16 0" /></symbol>
       <symbol id="i-board" viewBox="0 0 24 24" {...s}><rect x="3" y="4" width="18" height="13" rx="3" /><path d="M8 21h8M12 17v4M7 9h6M7 12h10" /></symbol>
-      <symbol id="i-mark" viewBox="0 0 64 64"><path d="M44 8.5A26 26 0 1 0 44 55.5 20 20 0 1 1 44 8.5Z" fill="currentColor" /><path d="M34 22h16a6 6 0 0 1 6 6v9a6 6 0 0 1-6 6h-6l-7 6v-6a6 6 0 0 1-6-6v-9a6 6 0 0 1 3-6Z" fill="var(--violet)" /><path d="m43 26 1.9 3.9 4.3.6-3.1 3 .7 4.3-3.8-2-3.8 2 .7-4.3-3.1-3 4.3-.6z" fill="var(--bg)" /></symbol>
+      <symbol id="i-mark" viewBox="0 0 64 64"><path d="M32 8a12 12 0 0 1 12 12v6h-6v-6a6 6 0 0 0-12 0v6h-6v-6A12 12 0 0 1 32 8Z" fill="currentColor" /><path fillRule="evenodd" d="M18 25h28a6 6 0 0 1 6 6v17a6 6 0 0 1-6 6H31l-8 7v-7h-5a6 6 0 0 1-6-6V31a6 6 0 0 1 6-6Zm14 4-3.3 6.7-7.4 1.1 5.4 5.2-1.3 7.3 6.6-3.5 6.6 3.5-1.3-7.3 5.4-5.2-7.4-1.1Z" fill="currentColor" /></symbol>
     </svg>
   );
 }
