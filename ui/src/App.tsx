@@ -34,6 +34,21 @@ const errorText = (e: unknown) => {
   return raw;
 };
 
+const describeError = (e: unknown) => {
+  const chain: string[] = [];
+  let cause: unknown = e;
+  while (cause) {
+    chain.push(cause instanceof Error ? cause.message : JSON.stringify(cause));
+    cause = cause instanceof Error ? cause.cause : undefined;
+  }
+  const all = chain.join(' ');
+  if (/Wallet\.Proving|Failed to prove transaction/.test(all))
+    return 'Lace could not prove the fee. In Lace open Settings → Midnight, choose Proof Server: Local (http://localhost:6300), save, and try again.';
+  if (/Insufficient|not enough|dust/i.test(all) && /balance|fee|funds/i.test(all))
+    return 'Not enough tDUST to pay the fee. Wait for your tDUST to refill in Lace and try again.';
+  return errorText(e);
+};
+
 export default function App() {
   const [secret, setSecret] = useState<Uint8Array>(() => loadSecret());
   const [session, setSession] = useState<WalletSession | null>(null);
@@ -107,7 +122,7 @@ export default function App() {
       await refresh();
     } catch (e) {
       console.error(e);
-      setNotice({ kind: 'err', text: errorText(e) });
+      setNotice({ kind: 'err', text: describeError(e) });
     } finally {
       setBusy(null);
     }
