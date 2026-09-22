@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 80" width="300" height="80">
+  <defs>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&amp;display=swap');</style>
+  </defs>
+  <rect width="300" height="80" rx="18" fill="#0b0b10"/>
+  <g transform="translate(14 8)">
+    <path d="M44 8.5A26 26 0 1 0 44 55.5 20 20 0 1 1 44 8.5Z" fill="#f4f4f6"/>
+    <path d="M34 22h16a6 6 0 0 1 6 6v9a6 6 0 0 1-6 6h-6l-7 6v-6a6 6 0 0 1-6-6v-9a6 6 0 0 1 3-6Z" fill="#8b7cff"/>
+    <path d="m43 26 1.9 3.9 4.3.6-3.1 3 .7 4.3-3.8-2-3.8 2 .7-4.3-3.1-3 4.3-.6z" fill="#0b0b10"/>
+  </g>
+  <text x="90" y="53" font-family="Inter, Aspekta, Arial, sans-serif" font-weight="500" font-size="38" letter-spacing="-0.8" fill="#f4f4f6">Candor</text>
+</svg>

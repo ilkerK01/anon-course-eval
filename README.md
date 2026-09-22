@@ -1,3 +1,5 @@
+<p align="center"><img src="ui/public/img/candor-logo.svg" alt="Candor" width="300"></p>
+
 # Candor
 
 [![CI](https://github.com/ilkerK01/anon-course-eval/actions/workflows/ci.yml/badge.svg)](https://github.com/ilkerK01/anon-course-eval/actions/workflows/ci.yml)
