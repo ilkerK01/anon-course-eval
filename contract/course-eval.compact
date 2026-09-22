@@ -12,6 +12,7 @@ export ledger courseCode: Bytes<32>;
 export ledger instructor: Bytes<32>;
 export ledger phase: Phase;
 export ledger roster: HistoricMerkleTree<10, Bytes<32>>;
+export ledger enrolledCodes: Set<Bytes<32>>;
 export ledger enrolled: Counter;
 export ledger nullifiers: Set<Bytes<32>>;
 export ledger responses: Counter;
@@ -50,7 +51,10 @@ circuit onlyInstructor(): [] {
 export circuit enroll(commitment: Bytes<32>): [] {
   onlyInstructor();
   assert(phase == Phase.ENROLLMENT, "enrollment is closed");
-  roster.insert(disclose(commitment));
+  const code = disclose(commitment);
+  assert(!enrolledCodes.member(code), "this enrollment code is already on the roster");
+  enrolledCodes.insert(code);
+  roster.insert(code);
   enrolled.increment(1);
 }
 

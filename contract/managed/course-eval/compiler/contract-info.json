@@ -247,14 +247,24 @@
       }
     },
     {
-      "name": "enrolled",
+      "name": "enrolledCodes",
       "index": 4,
+      "exported": true,
+      "storage": "Set",
+      "type": {
+        "type-name": "Bytes",
+        "length": 32
+      }
+    },
+    {
+      "name": "enrolled",
+      "index": 5,
       "exported": true,
       "storage": "Counter"
     },
     {
       "name": "nullifiers",
-      "index": 5,
+      "index": 6,
       "exported": true,
       "storage": "Set",
       "type": {
@@ -264,43 +274,43 @@
     },
     {
       "name": "responses",
-      "index": 6,
-      "exported": true,
-      "storage": "Counter"
-    },
-    {
-      "name": "ratingTotal",
       "index": 7,
       "exported": true,
       "storage": "Counter"
     },
     {
-      "name": "oneStar",
+      "name": "ratingTotal",
       "index": 8,
       "exported": true,
       "storage": "Counter"
     },
     {
-      "name": "twoStar",
+      "name": "oneStar",
       "index": 9,
       "exported": true,
       "storage": "Counter"
     },
     {
-      "name": "threeStar",
+      "name": "twoStar",
       "index": 10,
       "exported": true,
       "storage": "Counter"
     },
     {
-      "name": "fourStar",
+      "name": "threeStar",
       "index": 11,
       "exported": true,
       "storage": "Counter"
     },
     {
-      "name": "fiveStar",
+      "name": "fourStar",
       "index": 12,
+      "exported": true,
+      "storage": "Counter"
+    },
+    {
+      "name": "fiveStar",
+      "index": 13,
       "exported": true,
       "storage": "Counter"
     }

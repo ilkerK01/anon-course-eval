@@ -35,6 +35,18 @@ describe('course evaluation contract', () => {
     expect(() => sim.enroll(CourseEvalSimulator.commitmentOf(bob))).toThrow(/only the instructor/);
   });
 
+  it('refuses to enroll the same code twice', () => {
+    enrollAll(alice);
+    expect(() => sim.enroll(CourseEvalSimulator.commitmentOf(alice))).toThrow(/already on the roster/);
+    expect(sim.ledger().enrolled).toBe(1n);
+  });
+
+  it('lets a student who enrolled early rate after many later enrollments', () => {
+    enrollAll(alice, ...Array.from({ length: 12 }, randomKey));
+    sim.as(instructor).openEvaluation();
+    expect(sim.as(alice).submitRating(3).responses).toBe(1n);
+  });
+
   it('refuses to open an evaluation with no students', () => {
     sim.as(instructor);
     expect(() => sim.openEvaluation()).toThrow(/no students enrolled/);

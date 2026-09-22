@@ -58,6 +58,12 @@ export type Ledger = {
     findPathForLeaf(leaf_0: Uint8Array): __compactRuntime.MerkleTreePath<Uint8Array> | undefined;
     history(): Iterator<__compactRuntime.MerkleTreeDigest>
   };
+  enrolledCodes: {
+    isEmpty(): boolean;
+    size(): bigint;
+    member(elem_0: Uint8Array): boolean;
+    [Symbol.iterator](): Iterator<Uint8Array>
+  };
   readonly enrolled: bigint;
   nullifiers: {
     isEmpty(): boolean;
